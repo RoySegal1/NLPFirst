@@ -1,5 +1,11 @@
+import pandas as pd
+data = pd.read_csv('spam.csv', encoding="latin1")
 
-corpus = []
-with open('spam.csv', 'r') as f:
-    for line in f:
-        corpus.append(line.strip())
+data = data.iloc[:, :-3]
+
+print(data.head())
+
+corpus = data.values.tolist()
+
+for row in corpus:
+    print(row)

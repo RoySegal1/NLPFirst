@@ -1,0 +1,2 @@
+Libraries:
+nltk,spaCy,BeautifulSoup4,Pandas
