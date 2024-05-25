@@ -12,7 +12,7 @@ import requests
 data = pd.read_csv('spam.csv', encoding="latin1")
 
 data = data.iloc[:, :-3]
-nlp = spacy.load('en_core_web_sm')
+#nlp = spacy.load('en_core_web_sm')
 print(data.head())
 print(f"We have {len(data)} messages.")
 # Extract the first column

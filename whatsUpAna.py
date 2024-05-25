@@ -1,4 +1,3 @@
-
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer, PorterStemmer
 from bs4 import BeautifulSoup
@@ -7,11 +6,12 @@ from collections import Counter
 import re
 
 # Open the text file in read mode
-with open('whatsup.txt', 'r',encoding='utf-8') as file:
+with open('whatsup.txt', 'r', encoding='utf-8') as file:
     # Read the entire contents of the file into a string
     file_contents = file.read()
 
-words = re.findall(r'\b\w+\b', file_contents.lower())
+words_new = re.findall(r'\b\w+\b', file_contents.lower())
+
 
 def print_word_statistics(words, title):
     word_counts = Counter(words)
@@ -42,10 +42,11 @@ def stem(tokens):
     stemmer = PorterStemmer()
     return [stemmer.stem(token) for token in tokens]
 
-tokens = word_tokenize(file_contents)
-lemmatized_tokens = lemmatize(tokens)
-stemmed_tokens = stem(tokens)
-print_word_statistics(words, "Roy")
-print_word_statistics(tokens, "Roy - Token")
+
+tokens_new = word_tokenize(file_contents)
+lemmatized_tokens = lemmatize(tokens_new)
+stemmed_tokens = stem(tokens_new)
+print_word_statistics(words_new, "Roy")
+print_word_statistics(tokens_new, "Roy - Token")
 print_word_statistics(lemmatized_tokens, "Roy-Lemma")
 print_word_statistics(stemmed_tokens, "Roy-Stem")
