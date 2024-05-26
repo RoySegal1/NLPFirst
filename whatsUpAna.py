@@ -1,3 +1,4 @@
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer, PorterStemmer
 from bs4 import BeautifulSoup
@@ -42,11 +43,15 @@ def stem(tokens):
     stemmer = PorterStemmer()
     return [stemmer.stem(token) for token in tokens]
 
- ## need to remove punctation, stop words, and duplicate
+
+## need to remove punctation, stop words, and duplicate
 
 tokens_new = word_tokenize(file_contents)
-lemmatized_tokens = lemmatize(tokens_new)
-stemmed_tokens = stem(tokens_new)
+stopwords = nltk.corpus.stopwords.words('english')
+filtered_tokens = [token.lower() for token in tokens_new if token.lower() not in stopwords and token.isalpha()]
+filtered_tokens = list(set(filtered_tokens))
+lemmatized_tokens = lemmatize(filtered_tokens)
+stemmed_tokens = stem(filtered_tokens)
 print_word_statistics(words_new, "Roy")
 print_word_statistics(tokens_new, "Roy - Token")
 print_word_statistics(lemmatized_tokens, "Roy-Lemma")

@@ -6,7 +6,6 @@ import requests
 from collections import Counter
 import re
 
-
 def print_word_statistics(words, title):
     word_counts = Counter(words)
     total_words = len(words)
@@ -47,10 +46,11 @@ for paragraph in paragraphs:
 data_new = ' '.join(data)
 words_new = re.findall(r'\b\w+\b', data_new.lower())
 # Tokenization
-
 tokens_all = tokenize(data_new)
-lemmas_all = lemmatize(tokens_all)
-stems_all = stem(tokens_all)
+stopwords = nltk.corpus.stopwords.words('english')
+filtered_tokens = [token.lower() for token in tokens_all if token.lower() not in stopwords and token.isalpha()]
+lemmas_all = lemmatize(filtered_tokens)
+stems_all = stem(filtered_tokens)
 print_word_statistics(words_new, "Alan Turing")
 print_word_statistics(tokens_all, "Alan Turing After Tokenize")
 print_word_statistics(lemmas_all, "Alan Turing After lemmatization")

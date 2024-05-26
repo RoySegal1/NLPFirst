@@ -18,20 +18,6 @@ def remove_punctuation(input_string):
     return input_string.translate(translator)
 
 
-def remove_stop_words(input_string):
-    stop_words = set([
-        'the', 'and', 'is', 'in', 'to', 'it', 'that', 'of', 'for', 'on', 'with',
-        'as', 'by', 'at', 'from', 'or', 'an', 'a', 'be', 'this', 'which', 'you',
-        'i', 'we', 'they', 'but', 'he', 'she', 'if', 'will', 'not', 'are', 'was',
-        'were', 'his', 'her', 'its', 'have', 'has', 'had', 'do', 'does', 'did',
-        'been', 'their', 'my', 'your', 'can', 'could', 'should', 'would', 'shall'
-    ])
-
-    words_new = input_string.split()
-    filtered_words = [word for word in words if word.lower() not in stop_words]
-
-    return ' '.join(filtered_words)
-
 
 
 
@@ -52,7 +38,6 @@ print(f"We have {average_word_count} words in average.")
 
 # Convert all messages to a single string
 all_words = ' '.join(messages)
-all_words = remove_punctuation(all_words)
 # Remove any non-alphabetic characters and split into words
 words = re.findall(r'\b\w+\b', all_words.lower())
 # Count the occurrences of each word
@@ -70,26 +55,29 @@ print(f"Words that appear only once:{len(words_appear_once)}")
 
 start_time = time.time()
 tokens_nltk = nltk.word_tokenize(all_words) # need to stop duplicate and stop words, think where to do each step
+stopwords = nltk.corpus.stopwords.words('english')
+filtered_tokens = [token.lower() for token in tokens_nltk if token.lower() not in stopwords and token.isalpha()]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Tokenize with nltk")
-tokens_nltk = list(set(tokens_nltk))
 token_counts = Counter(tokens_nltk)
 most_common_words = token_counts.most_common(5)
 print(f"There Are {len(tokens_nltk)} Words after tokenization")
 print("The 5 most frequent words after tokenization in nltk are")
 for word, count in most_common_words:
     print(f"{word}: {count}")
+filtered_tokens = list(set(filtered_tokens)) # no Dups
 
-# remove all duplicates in order to see the difference of lemmatization and tokenization
-tokens_nltk_unique = list(set(tokens_nltk))
+
 # start_time = time.time()
 # tokens_spacy = [token.text for token in nlp(all_words)]
 # end_time = time.time()
 # print(f"It took {end_time - start_time:.2f} seconds to Tokenize with spacy")
 
+
+#lem With nltk
 start_time = time.time()
 lemmatizer = nltk.WordNetLemmatizer()
-lemmatizer_words = [lemmatizer.lemmatize(word) for word in tokens_nltk_unique]
+lemmatizer_words = [lemmatizer.lemmatize(word) for word in filtered_tokens]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Lemmatize in nltk")
 lemmatizer_count = Counter(lemmatizer_words)
@@ -108,10 +96,12 @@ for word, count in most_common_words:
 # end_time = time.time()
 # print(f"It took {end_time - start_time:.2f} seconds to lemmatize with spaCy")
 
+
+
 # Stem in nltk
 start_time = time.time()
 stemmer = PorterStemmer()
-stemmed_words = [stemmer.stem(word) for word in tokens_nltk_unique]
+stemmed_words = [stemmer.stem(word) for word in filtered_tokens]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Stem in nltk")
 stem_count = Counter(stemmed_words)
@@ -122,9 +112,3 @@ for word, count in most_common_words:
     print(f"{word}: {count}")
 
     ## END OF TEXT PROCESSING
-url = "https://www.facebook.com/roy.segal.739"
-response = requests.get(url)
-soup = BeautifulSoup(response.text, 'html.parser')
-paragraphs = soup.find_all('p')
-for paragraph in paragraphs:
-    print(paragraph.text)
