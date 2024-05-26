@@ -36,7 +36,7 @@ def stem(tokens):
     stemmer = PorterStemmer()
     return [stemmer.stem(token) for token in tokens]
 
-
+ ## need to remove punctation, stop words, and duplicate
 url = 'https://en.wikipedia.org/wiki/Alan_Turing'
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')

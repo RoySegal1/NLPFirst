@@ -9,6 +9,32 @@ from collections import Counter
 import re
 from bs4 import BeautifulSoup
 import requests
+import string
+
+
+def remove_punctuation(input_string):
+    # Define the translation table for removing punctuation
+    translator = str.maketrans('', '', string.punctuation)
+    return input_string.translate(translator)
+
+
+def remove_stop_words(input_string):
+    stop_words = set([
+        'the', 'and', 'is', 'in', 'to', 'it', 'that', 'of', 'for', 'on', 'with',
+        'as', 'by', 'at', 'from', 'or', 'an', 'a', 'be', 'this', 'which', 'you',
+        'i', 'we', 'they', 'but', 'he', 'she', 'if', 'will', 'not', 'are', 'was',
+        'were', 'his', 'her', 'its', 'have', 'has', 'had', 'do', 'does', 'did',
+        'been', 'their', 'my', 'your', 'can', 'could', 'should', 'would', 'shall'
+    ])
+
+    words_new = input_string.split()
+    filtered_words = [word for word in words if word.lower() not in stop_words]
+
+    return ' '.join(filtered_words)
+
+
+
+
 data = pd.read_csv('spam.csv', encoding="latin1")
 
 data = data.iloc[:, :-3]
@@ -17,19 +43,20 @@ print(data.head())
 print(f"We have {len(data)} messages.")
 # Extract the first column
 label_counts = data.iloc[:, 0].value_counts()
-print(f"We have {label_counts.get('ham',0)} Ham and {label_counts.get('spam',0)} Spam.")
+print(f"We have {label_counts.get('ham', 0)} Ham and {label_counts.get('spam', 0)} Spam.")
 # Extract the messages column
 messages = data.iloc[:, 1]
-word_counts = messages.apply(lambda x: len(x.split())) ## gets the number of words
-average_word_count = word_counts.mean() ## gets the mean of the numbers of words
+word_counts = messages.apply(lambda x: len(x.split()))  ## gets the number of words
+average_word_count = word_counts.mean()  ## gets the mean of the numbers of words
 print(f"We have {average_word_count} words in average.")
 
 # Convert all messages to a single string
 all_words = ' '.join(messages)
-
+all_words = remove_punctuation(all_words)
 # Remove any non-alphabetic characters and split into words
 words = re.findall(r'\b\w+\b', all_words.lower())
 # Count the occurrences of each word
+
 word_counts = Counter(words)
 # Get the 5 most common words
 most_common_words = word_counts.most_common(5)
@@ -42,9 +69,10 @@ for word, count in most_common_words:
 print(f"Words that appear only once:{len(words_appear_once)}")
 
 start_time = time.time()
-tokens_nltk = nltk.word_tokenize(all_words)
+tokens_nltk = nltk.word_tokenize(all_words) # need to stop duplicate and stop words, think where to do each step
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Tokenize with nltk")
+tokens_nltk = list(set(tokens_nltk))
 token_counts = Counter(tokens_nltk)
 most_common_words = token_counts.most_common(5)
 print(f"There Are {len(tokens_nltk)} Words after tokenization")
@@ -68,7 +96,7 @@ lemmatizer_count = Counter(lemmatizer_words)
 most_common_words = lemmatizer_count.most_common(5)
 print(f"There Are {len(lemmatizer_words)} Words after Lemmatize")
 print("The 5 most frequent words after Lemmatize in nltk are")
-for word, count in most_common_words :
+for word, count in most_common_words:
     print(f"{word}: {count}")
 
 # # Lemmatization with spaCy
@@ -100,7 +128,3 @@ soup = BeautifulSoup(response.text, 'html.parser')
 paragraphs = soup.find_all('p')
 for paragraph in paragraphs:
     print(paragraph.text)
-
-
-
-

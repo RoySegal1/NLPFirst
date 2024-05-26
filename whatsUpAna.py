@@ -42,6 +42,7 @@ def stem(tokens):
     stemmer = PorterStemmer()
     return [stemmer.stem(token) for token in tokens]
 
+ ## need to remove punctation, stop words, and duplicate
 
 tokens_new = word_tokenize(file_contents)
 lemmatized_tokens = lemmatize(tokens_new)
