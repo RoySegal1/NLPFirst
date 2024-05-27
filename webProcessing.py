@@ -49,6 +49,7 @@ words_new = re.findall(r'\b\w+\b', data_new.lower())
 tokens_all = tokenize(data_new)
 stopwords = nltk.corpus.stopwords.words('english')
 filtered_tokens = [token.lower() for token in tokens_all if token.lower() not in stopwords and token.isalpha()]
+filtered_tokens = list(set(filtered_tokens))
 lemmas_all = lemmatize(filtered_tokens)
 stems_all = stem(filtered_tokens)
 print_word_statistics(words_new, "Alan Turing")
