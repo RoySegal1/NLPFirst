@@ -12,19 +12,28 @@ import requests
 import string
 
 
+def print_word_statistics(words2, title):
+    word_counts2 = Counter(words2)
+    total_words = len(words2)
+    unique_words2 = len(word_counts2)
+    most_common_words2 = word_counts2.most_common(5)
+
+    print(f"{title} Statistics:")
+    print(f"Total words: {total_words}")
+    print(f"Unique words: {unique_words2}")
+    print(f"Most common words: {most_common_words2}")
+    print("\n")
+
+
 def remove_punctuation(input_string):
     # Define the translation table for removing punctuation
     translator = str.maketrans('', '', string.punctuation)
     return input_string.translate(translator)
 
 
-
-
-
 data = pd.read_csv('spam.csv', encoding="latin1")
-
 data = data.iloc[:, :-3]
-#nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load('en_core_web_sm')
 print(data.head())
 print(f"We have {len(data)} messages.")
 # Extract the first column
@@ -53,25 +62,27 @@ for word, count in most_common_words:
     print(f"{word}: {count}")
 print(f"Words that appear only once:{len(words_appear_once)}")
 
+
+# NLTK TOKEN
 start_time = time.time()
 tokens_nltk = nltk.word_tokenize(all_words) # need to stop duplicate and stop words, think where to do each step
 stopwords = nltk.corpus.stopwords.words('english')
 filtered_tokens = [token.lower() for token in tokens_nltk if token.lower() not in stopwords and token.isalpha()]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Tokenize with nltk")
-token_counts = Counter(tokens_nltk)
-most_common_words = token_counts.most_common(5)
-print(f"There Are {len(tokens_nltk)} Words after tokenization")
-print("The 5 most frequent words after tokenization in nltk are")
-for word, count in most_common_words:
-    print(f"{word}: {count}")
-filtered_tokens = list(set(filtered_tokens)) # no Dups
+print_word_statistics(filtered_tokens,'NLTK After Tokenize')
+filtered_tokens = list(set(filtered_tokens))# no Dups
 
 
-# start_time = time.time()
-# tokens_spacy = [token.text for token in nlp(all_words)]
-# end_time = time.time()
-# print(f"It took {end_time - start_time:.2f} seconds to Tokenize with spacy")
+## SPACY TOKEN
+start_time = time.time()
+tokens_spacy = nlp(all_words)
+end_time = time.time()
+print(f"It took {end_time - start_time:.2f} seconds to Tokenize with spacy")
+tokens_without_stopwords = [token.text for token in tokens_spacy if not token.is_stop and token.text not in string.punctuation]
+print_word_statistics(tokens_without_stopwords,'Spacy After Token')
+tokens_without_stopwords = list(set(tokens_without_stopwords))
+
 
 
 #lem With nltk
@@ -80,22 +91,14 @@ lemmatizer = nltk.WordNetLemmatizer()
 lemmatizer_words = [lemmatizer.lemmatize(word) for word in filtered_tokens]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Lemmatize in nltk")
-lemmatizer_count = Counter(lemmatizer_words)
-most_common_words = lemmatizer_count.most_common(5)
-print(f"There Are {len(lemmatizer_words)} Words after Lemmatize")
-print("The 5 most frequent words after Lemmatize in nltk are")
-for word, count in most_common_words:
-    print(f"{word}: {count}")
+print_word_statistics(lemmatizer_words,'Nltk After Lemmatization')
 
-# # Lemmatization with spaCy
-# start_time = time.time()
-# # Create a spaCy document
-# doc_spacy = nlp(all_words)
-# # Extract lemmas
-# lemmatizer_words_spacy = [token.lemma_ for token in doc_spacy]
-# end_time = time.time()
-# print(f"It took {end_time - start_time:.2f} seconds to lemmatize with spaCy")
 
+start_time = time.time()
+lemmatizer_words_spacy = [token.lemma_ for token in tokens_spacy if not token.is_stop and token.text not in string.punctuation]
+end_time = time.time()
+print(f"It took {end_time - start_time:.2f} seconds to lemmatize with spaCy")
+print_word_statistics(lemmatizer_words_spacy,'Spacy After Lem')
 
 
 # Stem in nltk
@@ -104,11 +107,5 @@ stemmer = PorterStemmer()
 stemmed_words = [stemmer.stem(word) for word in filtered_tokens]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Stem in nltk")
-stem_count = Counter(stemmed_words)
-most_common_words = stem_count.most_common(5)
-print(f"There Are {len(lemmatizer_words)} Words after Stem")
-print("The 5 most frequent words after Stem in nltk are")
-for word, count in most_common_words:
-    print(f"{word}: {count}")
-
+print_word_statistics(stemmed_words,'NLTK in stem')
     ## END OF TEXT PROCESSING

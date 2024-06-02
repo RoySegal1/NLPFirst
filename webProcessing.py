@@ -35,6 +35,7 @@ def stem(tokens):
     stemmer = PorterStemmer()
     return [stemmer.stem(token) for token in tokens]
 
+
  ## need to remove punctation, stop words, and duplicate
 url = 'https://en.wikipedia.org/wiki/Alan_Turing'
 response = requests.get(url)
@@ -46,13 +47,15 @@ for paragraph in paragraphs:
 data_new = ' '.join(data)
 words_new = re.findall(r'\b\w+\b', data_new.lower())
 # Tokenization
+print_word_statistics(words_new, "Alan Turing")
 tokens_all = tokenize(data_new)
 stopwords = nltk.corpus.stopwords.words('english')
 filtered_tokens = [token.lower() for token in tokens_all if token.lower() not in stopwords and token.isalpha()]
+print_word_statistics(filtered_tokens, "Alan Turing After Tokenize")
 filtered_tokens = list(set(filtered_tokens))
 lemmas_all = lemmatize(filtered_tokens)
 stems_all = stem(filtered_tokens)
-print_word_statistics(words_new, "Alan Turing")
-print_word_statistics(tokens_all, "Alan Turing After Tokenize")
+
+
 print_word_statistics(lemmas_all, "Alan Turing After lemmatization")
 print_word_statistics(stems_all, "Alan Turing After stem")
