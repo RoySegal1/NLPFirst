@@ -3,12 +3,8 @@ import time
 import nltk
 import spacy
 from nltk import PorterStemmer
-from spacy.tokenizer import Tokenizer
-from spacy.lang.en import English
 from collections import Counter
 import re
-from bs4 import BeautifulSoup
-import requests
 import string
 
 
@@ -61,29 +57,50 @@ print("The 5 most frequent words are:")
 for word, count in most_common_words:
     print(f"{word}: {count}")
 print(f"Words that appear only once:{len(words_appear_once)}")
-
-
+stopwords = nltk.corpus.stopwords.words('english')
+filtered_words = [word for word in words if word not in stopwords and word not in string.punctuation]
+filtered_string = ' '.join(filtered_words)
 # NLTK TOKEN
 start_time = time.time()
-tokens_nltk = nltk.word_tokenize(all_words) # need to stop duplicate and stop words, think where to do each step
-stopwords = nltk.corpus.stopwords.words('english')
-filtered_tokens = [token.lower() for token in tokens_nltk if token.lower() not in stopwords and token.isalpha()]
+tokens_nltk = nltk.word_tokenize(filtered_string)# need to stop duplicate and stop words, think where to do each step
+#stopwords = nltk.corpus.stopwords.words('english')
+#filtered_tokens = [token.lower() for token in tokens_nltk if token.lower() not in stopwords and token.isalpha()]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Tokenize with nltk")
-print_word_statistics(filtered_tokens,'NLTK After Tokenize')
-filtered_tokens = list(set(filtered_tokens))# no Dups
+print_word_statistics(tokens_nltk,'NLTK After Tokenize')
+filtered_tokens = list(set(tokens_nltk))# no Dups
 
 
 ## SPACY TOKEN
 start_time = time.time()
-tokens_spacy = nlp(all_words)
+tokens_spacy = nlp(filtered_string)
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to Tokenize with spacy")
-tokens_without_stopwords = [token.text for token in tokens_spacy if not token.is_stop and token.text not in string.punctuation]
-print_word_statistics(tokens_without_stopwords,'Spacy After Token')
-tokens_without_stopwords = list(set(tokens_without_stopwords))
+#tokens_without_stopwords = [token.text for token in tokens_spacy if not token.is_stop and token.text not in string.punctuation]
+tokens_without_stopwords = list(set(tokens_spacy))
+#print_word_statistics(tokens_spacy,'Spacy After Token')
 
+# Create a set to store unique words
+unique_words = set()
+# Iterate through tokens
+for token in tokens_spacy:
+    # Filter out stopwords, punctuation, and spaces
+    if not token.is_stop and not token.is_punct and not token.is_space:
+        # Add the token's lowercase form to the set
+        unique_words.add(token.text.lower())
 
+# Get the number of unique words
+filtered_tokens = [token.text.lower() for token in tokens_spacy]
+
+# Count the frequency of each word
+word_freq = Counter(filtered_tokens)
+
+# Get the 5 most common words
+most_common_words = word_freq.most_common(5)
+num_unique_words = len(unique_words)
+print(f'Number of Tokens :{len(tokens_spacy)}')
+print(f"Number of unique words: {num_unique_words}")
+print(f'Most 5 :{most_common_words}')
 
 #lem With nltk
 start_time = time.time()
@@ -95,7 +112,7 @@ print_word_statistics(lemmatizer_words,'Nltk After Lemmatization')
 
 
 start_time = time.time()
-lemmatizer_words_spacy = [token.lemma_ for token in tokens_spacy if not token.is_stop and token.text not in string.punctuation]
+lemmatizer_words_spacy = [token.lemma_ for token in tokens_spacy]
 end_time = time.time()
 print(f"It took {end_time - start_time:.2f} seconds to lemmatize with spaCy")
 print_word_statistics(lemmatizer_words_spacy,'Spacy After Lem')
