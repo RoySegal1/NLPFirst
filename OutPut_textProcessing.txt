@@ -1,0 +1,67 @@
+We have 5572 messages.
+We have 4825 Ham and 747 Spam.
+We have 15.494436468054559 words in average.
+The 5 most frequent words are:
+i: 3001
+to: 2242
+you: 2240
+a: 1433
+the: 1328
+Words that appear only once:4376
+
+
+It took 0.08 seconds to Tokenize with nltk
+NLTK After Tokenize Statistics:
+Total words: 53535
+Unique words: 8567
+Most common words: [('u', 1192), ('call', 591), ('2', 528), ('get', 391), ('ur', 385)]
+
+
+
+It took 5.14 seconds to Tokenize with spacy
+Number of Tokens :54222
+Number of unique words: 8382
+Most 5 :[('u', 1192), ('call', 591), ('2', 528), ('get', 391), ('ur', 385)]
+
+We can see that the time it took spacy to tokenize the data was 64 time slower than NLTK,
+the total words and unique words of each implementation is similar.
+we observed slight difference in each tokenization process (can't is divided to can,n't in both i've aswell), but co-founded is divided differently
+
+
+It took 0.77 seconds to Lemmatize in nltk
+Nltk After Lemmatization Statistics:
+Total words: 8567
+Unique words: 8047
+Most common words: [('go', 3), ('le', 3), ('slice', 2), ('bus', 2), ('guide', 2)]
+
+
+
+It took 0.00 seconds to lemmatize with spaCy
+Spacy After Lem Statistics:
+Total words: 7451
+Unique words: 6353
+Most common words: [('go', 6), ('get', 6), ('take', 5), ('know', 5), ('fall', 5)]
+
+
+this time spaCy was faster then NLK in contrary to the tokenization.
+the number of unique words at nltk is larger proportionally to spaCy, 
+thus we can deduce that the nltk lemmatizeion process groups less as an example we can see that the word go appears 6 times in spacy and 3 in nltk.
+
+
+
+It took 0.08 seconds to Stem in nltk
+NLTK in stem Statistics:
+Total words: 8567
+Unique words: 7244
+Most common words: [('hope', 7), ('care', 6), ('use', 5), ('remind', 5), ('predict', 5)]
+
+
+
+It took 0.07 seconds to Stem in spacy
+Spacy After Stemming Statistics:
+Total words: 7451
+Unique words: 6133
+Most common words: [('hope', 7), ('care', 6), ('like', 5), ('use', 5), ('love', 5)]
+
+the stemming process in both took the same time.
+the proportionality between the total words and the unique words is similar in both.

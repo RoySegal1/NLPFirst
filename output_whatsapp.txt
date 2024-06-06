@@ -1,0 +1,25 @@
+Roy Statistics:
+Total words: 1049
+Unique words: 427
+Most common words: [('רועי', 110), ('סגל', 110), ('קעטבי', 84), ('לא', 46), ('זה', 22), ('אני', 19), ('מה', 14), ('אחי', 12), ('אתה', 12), ('לי', 12)]
+
+
+Roy - Token Statistics:
+Total words: 2221
+Unique words: 470
+Most common words: [('[', 193), (',', 193), (']', 193), (':', 193), ('5/22/2024', 112), ('רועי', 110), ('סגל', 110), ('קעטבי', 84), ('לא', 46), ('5/20/2024', 41)]
+
+
+Roy-Lemma Statistics:
+Total words: 424
+Unique words: 424
+Most common words: [('שיחפשו', 1), ('צודק', 1), ('אותם', 1), ('אז', 1), ('את', 1), ('שיאהבו', 1), ('במצבה', 1), ('תראה', 1), ('מקסימום', 1), ('לעמוד', 1)]
+
+
+Roy-Stem Statistics:
+Total words: 424
+Unique words: 424
+Most common words: [('שיחפשו', 1), ('צודק', 1), ('אותם', 1), ('אז', 1), ('את', 1), ('שיאהבו', 1), ('במצבה', 1), ('תראה', 1), ('מקסימום', 1), ('לעמוד', 1)]
+
+
+its clear that the lemmatization and stemming didnt change anything.

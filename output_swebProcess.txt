@@ -1,0 +1,24 @@
+Alan Turing Statistics:
+Total words: 4524
+Unique words: 2114
+Most common words: [('turing', 202), ('work', 28), ('war', 27), ('would', 25), ('machine', 24)]
+
+
+Alan Turing After Tokenize Statistics:
+Total words: 4390
+Unique words: 2068
+Most common words: [('turing', 200), ('work', 28), ('war', 25), ('would', 25), ('machine', 24)]
+
+
+Alan Turing After lemmatization Statistics:
+Total words: 2068
+Unique words: 1970
+Most common words: [('cause', 2), ('conviction', 2), ('experiment', 2), ('cryptanalyst', 2), ('thought', 2)]
+
+
+Alan Turing After stem Statistics:
+Total words: 2068
+Unique words: 1707
+Most common words: [('consult', 5), ('comput', 5), ('show', 4), ('find', 4), ('assist', 4)]
+
+

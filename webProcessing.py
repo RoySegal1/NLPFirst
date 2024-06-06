@@ -37,6 +37,8 @@ def stem(tokens):
 
 
  ## need to remove punctation, stop words, and duplicate
+
+file = open("output_swebProcess.txt",'w')
 url = 'https://en.wikipedia.org/wiki/Alan_Turing'
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
@@ -46,10 +48,11 @@ for paragraph in paragraphs:
     data.append(paragraph.text)
 data_new = ' '.join(data)
 words_new = re.findall(r'\b\w+\b', data_new.lower())
+stopwords = nltk.corpus.stopwords.words('english')
+words_new = [token.lower() for token in words_new if token.lower() not in stopwords and token.isalpha()]
 # Tokenization
 print_word_statistics(words_new, "Alan Turing")
 tokens_all = tokenize(data_new)
-stopwords = nltk.corpus.stopwords.words('english')
 filtered_tokens = [token.lower() for token in tokens_all if token.lower() not in stopwords and token.isalpha()]
 print_word_statistics(filtered_tokens, "Alan Turing After Tokenize")
 filtered_tokens = list(set(filtered_tokens))
@@ -59,3 +62,4 @@ stems_all = stem(filtered_tokens)
 
 print_word_statistics(lemmas_all, "Alan Turing After lemmatization")
 print_word_statistics(stems_all, "Alan Turing After stem")
+file.close()
